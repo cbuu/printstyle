@@ -1,0 +1,11 @@
+<!--pages/paint/paint.wxml-->
+<view class='container' disable-scroll="true">
+<canvas class='canvas'
+ bindtouchstart="start"
+ bindtouchmove="move"
+ bindtouchend="end"
+ canvas-id="canvas"></canvas>
+
+<button bindtap='back'>back</button>
+<button bindtap='clear'>clear</button>
+</view>
