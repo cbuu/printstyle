@@ -7,7 +7,8 @@ Page({
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    animtext: null,
   },
   //事件处理函数
   bindViewTap: function() {
@@ -30,18 +31,11 @@ Page({
           hasUserInfo: true
         })
       }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
-      })
     }
+  },
+
+  invite : function(){
+    
   },
   getUserInfo: function(e) {
     console.log(e)
@@ -49,6 +43,24 @@ Page({
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
+    })
+  },
+  test: function(){
+    var socketOpen = false
+    var socketMsgQueue = []
+    wx.connectSocket({
+      url: 'wss://www.ioricbuu.cn'
+    })
+
+    wx.onSocketOpen(function (res) {
+      console.log('open');
+      wx.sendSocketMessage({
+        data: "fuck off"
+      })
+    })
+
+    wx.onSocketMessage(function (res) {
+      console.log('收到服务器内容：' + res.data)
     })
   }
 })
