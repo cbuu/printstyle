@@ -1,7 +1,8 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/paint/paint",
+    "pages/index/index",
+    
     
     "pages/canvas/canvas",
     "pages/logs/logs"

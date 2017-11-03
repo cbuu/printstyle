@@ -12,5 +12,52 @@
   margin: 0rpx;
   width:750rpx;
   height: 667rpx;
-  background-color: gray;
+  background-color: #DFDFDF;
+  margin-bottom: 25rpx;
+}
+
+.controller{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 25rpx;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 50rpx;
+  margin-right: 50rpx;
+}
+
+.btn-set {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background-color: blueviolet;
+}
+
+.text-fly {
+  background: #DDD;
+  height: 50rpx;
+  width: 100%;
+}
+
+.message {
+  position: absolute;
+}
+
+
+.message-container{
+  margin: 20rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.input-container{
+  width: 65%;
+  background-color: blanchedalmond;
+  padding: 20rpx;
+}
+
+.send {
+  margin-left: 5%;
+  width: 30%;
 }

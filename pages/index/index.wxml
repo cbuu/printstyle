@@ -2,16 +2,38 @@
 <view class="container">
   <view class='header'>
     <view class='userinfo'>
-       <image class="userinfo-avatar" src='{{userInfo.avatarUrl}}' background-size="cover"></image> 
+       <image class="userinfo-avatar" src='{{userInfo.avatarUrl}}'></image> 
+       <text class='userinfo-username'>{{userInfo.nickName}}的房间</text>
     </view>
-    <text class='userinfo-username'>{{userInfo.username}}的房间</text>
-    <button class='btn-invite' bindtap='invite'>邀请好友</button>
+    <view>
+      <button class='btn-invite' bindtap='invite'>邀请好友</button>
+    </view>
+      
   </view>
   <view class='user-list'>
     <view class='users'>
-    
+      <block wx:for="{{users}}" wx:key="unique">
+        <view class='user' wx:if="{{item.isEmpty}}" bindtap='sit'>坐下</view>
+        <view class='user' wx:else>
+          <image class="userinfo-avatar" src='{{item.avatar}}'></image>
+        </view>
+      </block>
     </view>
     <button class='btn-start' bindtap='startGame'>开始</button>
   </view>
-  <text animation="{{animtext}}">ywiewklela</text>
+
+  <view class='line'></view>
+
+  <view class="text-fly">
+    <block wx:for="{{messages}}" wx:key="unique">
+      <text class="message" style="color:{{item.color}};left:{{item.left}}px;">{{item.text}}</text>
+    </block>
+  </view>
+
+  <view class="message-container">
+     <view class="input-container">
+       <input bindblur="bind_blur" placeholder='输入聊天消息' value="{{input_value}}"/>
+     </view>
+     <button class="send" bindtap="send">发送</button>
+  </view>
 </view>

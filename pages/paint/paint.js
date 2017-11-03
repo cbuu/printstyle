@@ -10,13 +10,14 @@ Page({
     preX:0,
     preY:0,
     points:[],
-    curPointArray:[]
+    curPointArray:[],
+    curColor:"",
   },
 
   start: function(e) {
     var x = e.touches[0].x;
     var y = e.touches[0].y;
-    console.log("start x = " + x + " y = " + y );
+    // console.log("start x = " + x + " y = " + y );
     var point = [x, y];
     var curPointArr = [];
     curPointArr.push(point);
@@ -35,9 +36,10 @@ Page({
     // console.log("move x = " + x + " y = " + y);
     let ctx = wx.createCanvasContext('canvas');
     ctx.beginPath();
+    ctx.setStrokeStyle(this.data.curColor);
     ctx.setLineCap('round')
     ctx.setLineJoin('round')
-    ctx.setLineWidth(10)
+    ctx.setLineWidth(5)
     ctx.moveTo(this.data.preX, this.data.preY);
     ctx.lineTo(x,y);
     ctx.stroke();
@@ -63,19 +65,11 @@ Page({
       points : points,
     })
 
-    console.log(points);
+    // console.log(points);
   },
 
   back: function(){
-    // let ctx = wx.createCanvasContext('canvas');
-    // ctx.beginPath();
-    // ctx.setLineCap('round')
-    // ctx.setLineJoin('round')
-    // ctx.setLineWidth(10)
-    // ctx.moveTo(5, 5);
-    // ctx.lineTo(5, 5);
-    // ctx.stroke();
-    // ctx.draw(true);
+
     let ctx = wx.createCanvasContext('canvas');
     ctx.draw();
     let points = this.data.points;
@@ -89,9 +83,10 @@ Page({
 
     for(var i in points){
       ctx.beginPath();
+      ctx.setStrokeStyle(this.data.curColor);
       ctx.setLineCap('round')
       ctx.setLineJoin('round')
-      ctx.setLineWidth(10)
+      ctx.setLineWidth(5)
       var arr = points[i];
       
       // console.log(arr);
@@ -104,7 +99,7 @@ Page({
         var point = arr[j];
         x = point[0];
         y = point[1];
-        console.log(point);
+        // console.log(point);
         ctx.moveTo(preX, preY);
         ctx.lineTo(x, y);
         ctx.stroke();
@@ -130,10 +125,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // var a = [[1, 2, 3], [1, 2, 3]];
-    // for(var i in a){
-    //   console.log(a[i]);
-    // }
+    this.setData({
+      curColor: "rgb(" + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + ")"
+    })
   },
 
   /**
@@ -162,5 +156,11 @@ Page({
    */
   onUnload: function () {
   
+  },
+
+  changeColor: function() {
+    this.setData({
+      curColor: "rgb(" + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + ")"
+    })
   },
 })
