@@ -1,0 +1,88 @@
+/* pages/room/room.wxss */
+.header{
+  display: flex;
+  flex-direction: row;
+  margin: 20rpx;
+  height: 120rpx;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
+.userinfo {
+  display: flex;
+  align-items: center;
+}
+
+
+.userinfo-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-left: 20rpx;
+} 
+
+.userinfo-username {
+  margin-left: 20rpx;
+}
+
+.btn-invite {
+  margin-right: 50rpx;
+}
+
+.users {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.user {
+  border-style: solid;
+  border-color: blanchedalmond;
+  margin: 20rpx;
+  width : 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.line {
+  margin: 20rpx;
+  width: 710rpx;
+  height: 1rpx;
+  background: gray;
+}
+
+.text-fly {
+  background: #DDD;
+  height: 50rpx;
+  width: 100%;
+}
+
+.message {
+  position: absolute;
+}
+
+
+.message-container{
+  margin: 20rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.input-container{
+  width: 65%;
+  background-color: blanchedalmond;
+  padding: 20rpx;
+}
+
+.send {
+  margin-left: 5%;
+  width: 30%;
+}

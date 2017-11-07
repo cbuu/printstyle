@@ -1,12 +1,10 @@
 {
   "pages": [
-    "pages/paint/paint",
     "pages/index/index",
-    
-    
+    "pages/paint/paint",
     "pages/canvas/canvas",
-    "pages/logs/logs"
-    
+    "pages/logs/logs",
+    "pages/room/room"
   ],
   "window": {
     "backgroundTextStyle": "dark",

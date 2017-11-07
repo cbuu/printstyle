@@ -1,4 +1,4 @@
-<!--index.wxml-->
+<!--pages/room/room.wxml-->
 <view class="container">
   <view class='header'>
     <view class='userinfo'>
@@ -13,13 +13,12 @@
   <view class='user-list'>
     <view class='users'>
       <block wx:for="{{users}}" wx:key="unique">
-        <view class='user' wx:if="{{item.isEmpty}}" id="{{item.id}}" bindtap='sit'>坐下</view>
+        <view class='user' wx:if="{{item.isEmpty}}" bindtap='sit'>坐下</view>
         <view class='user' wx:else>
-          <image class="userinfo-avatar" src='{{item.avatar}}' bindtap='up' id="{{item.id}}"></image>
+          <image class="userinfo-avatar" src='{{item.avatar}}'></image>
         </view>
       </block>
     </view>
-    <button class='btn-start' bindtap='startGame'>开始</button>
   </view>
 
   <view class='line'></view>

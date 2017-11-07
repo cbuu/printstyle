@@ -1,81 +1,75 @@
 //app.js
 const config = require('./config');
+const api = require('./network/network.js')
 const host = config.host;
 
 App({
   onLaunch: function () {
-    console.log(wx.getStorageSync('token'))
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-    // wx.login({
-    //   success: res => {
-    //     // 发送 res.code 到后台换取 openId, sessionKey, unionId
-    //     wx.getUserInfo({
-    //       success:(info)=>{
-    //         console.log(info)
-    //         if (res.code) {
-    //           //发起网络请求
-    //           wx.request({
-    //             url: `${host}/login`,
-    //             data: {
-    //               code: res.code,
-    //               encryptedData:info.encryptedData,
-    //               iv:info.iv
-    //             },
-    //             success: function (res) {
-    //               console.log(res);
-    //               wx.setStorageSync('token',res.token);
-    //               wx.setStorageSync('user',res.user);
-    //             },
-    //           })
-    //         } else {
-    //           console.log('获取用户登录态失败！' + res.errMsg)
-    //         }
-    //       },
-    //     })
-        
-    //   }
-    // })
+
+    api.connect();  
     wx.checkSession({
       success:()=>{
         console.log('check session success')
+        
+        var token = wx.getStorageSync("token");
+        var user = wx.getStorageSync("user");
+        console.log(token);
+        console.log(user);
+        this.globalData.userInfo =  {
+          openId : user.openId,
+          nickName : user.name,
+          avatarUrl : user.avatar,
+        }
+        if (this.userInfoReadyCallback) {
+          this.userInfoReadyCallback()
+        }
       },
       fail:()=>{
         console.log('check session fail')
-        
-      }
-    })
+        wx.login({
+          success: res => {
+            // 发送 res.code 到后台换取 openId, sessionKey, unionId
+            wx.getUserInfo({
+              success: (info) => {
+                console.log(info)
+                if (res.code) {
+                  //发起网络请求
+                  wx.request({
+                    url: `${host}/login`,
+                    data: {
+                      code: res.code,
+                      encryptedData: info.encryptedData,
+                      iv: info.iv
+                    },
+                    success: function (res) {
+                      console.log(res.data);
+                      wx.setStorageSync('token', res.data.token);
+                      wx.setStorageSync('user', res.data.user);
+                      let user = res.data.user;
+                      this.globalData.userInfo = {
+                        openId: user.openId,
+                        nickName: user.name,
+                        avatarUrl: user.avatar,
+                      }
 
-    // 登录
-    
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              // console.log(res);
-              // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = res.userInfo
+                      if (this.userInfoReadyCallback){
+                        this.userInfoReadyCallback()
+                      }
+                    },
+                  })
+                } else {
+                  console.log('获取用户登录态失败！' + res.errMsg)
+                }
+              },
+            })
 
-              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-              // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
-              }
-            }
-          })
-        }
-      },
-      fail:err=>{
-        console.log(err);
+          }
+        })
       }
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    room:null,
   }
 })

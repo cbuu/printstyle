@@ -1,6 +1,8 @@
 //index.js
 //获取应用实例
 const app = getApp()
+const api = require('../../network/network')
+const emiter = require('../../utils/event.js')
 
 Page({
   data: {
@@ -12,8 +14,32 @@ Page({
     phoneWidth: 0,
   },
 
-  onLoad: function () {
+  onShareAppMessage : function(options){
+    return {
+      title : "邀请好友加入",
+      path  : "/pages/room/room?id=" + this.data.rid,
+      success : (res) => {
+        console.log("share success ");
+      },
+      fail   : (res)=> {
+        console.log("share fail ");
+      }
+    }
+  },
+
+  onLoad: function (res) {
+
+    this.initEmiter();
+
+    api.onMessage((res) => {
+      console.log(res);
+      var obj = JSON.parse(res.data);
+      emiter.emit(obj.api, obj.data);
+    })
+
+    var rid = wx.getStorageSync('rid');
     var that = this;
+
     //获取屏幕的宽度
     wx.getSystemInfo({
       success: function (res) {
@@ -22,26 +48,63 @@ Page({
         })
       }
     })
+
     if (app.globalData.userInfo) {
+      console.log("has userInfo")
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
+      api.emit('hello',rid);
     } else{
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        console.log(res);
+      console.log("don`t has userInfo")
+      app.userInfoReadyCallback = () => {
         this.setData({
-          userInfo: res.userInfo,
+          userInfo: app.globalData.userInfo,
           hasUserInfo: true
         })
+        api.emit('hello',rid);
       }
     }
 
 
     this.initUsers();
-    this.timer = setInterval(this.text_move, 20);
+    this.timer = setInterval(this.text_move, 16);
+    
+
+  },
+
+  initEmiter : function(){
+    var that = this;
+
+    emiter.on('msg',(data)=>{
+      var messages = that.data.messages;
+      var message = {
+        color: "green",
+        left: that.data.phoneWidth,
+        text: data,
+      }
+      if (messages.length > 0) {
+        var last = messages[messages.length - 1];
+        if (last.left > that.data.phoneWidth - 100) {
+          message.left = last.left + 100;
+        }
+      }
+
+      messages.push(message);
+      that.setData({
+        messages: messages,
+      })
+    })
+
+
+    emiter.on('room',(data)=>{
+      console.log(data);
+      var room = data;
+      app.globalData.room = room;
+      wx.setStorageSync('rid', room.id)
+    })
+
   },
 
   initUsers: function(){
@@ -65,7 +128,18 @@ Page({
   },
 
   sit : function(e) {
+    console.log(e.target.id);
+    var token = wx.getStorageSync(token);
+    var sitInfo = {
+      id : e.target.id,
+      rid : app.globalData.room.id,
+      token : token,
+    }
+    api.emit("sit",sitInfo)
+  },
 
+  up :function(e){
+    console.log(e.target.id);
   },
 
   startGame : function () {
@@ -76,21 +150,7 @@ Page({
   },
 
   send : function () {
-    var messages = this.data.messages;
-    var message = {
-      color: "green",
-      left: this.data.phoneWidth,
-      text: this.data.send_message,
-    }
-    if(messages.length >0){
-      var last = messages[messages.length - 1];
-      message.left = last.left + 100;
-    }
-    
-    messages.push(message);
-    this.setData({
-      messages : messages,
-    })
+    api.emit('msg',this.data.send_message);
   },
 
   bind_blur: function(e){
